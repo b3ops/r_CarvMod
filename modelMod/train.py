@@ -7,10 +7,6 @@ from torchvision import transforms
 import itertools
 from torch.profiler import profile, record_function, ProfilerActivity
 
-with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True) as prof:
-    train_model(...)
-print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
-
 transform = transforms.Compose([
     transforms.Resize((256, 256)),  # Resize images to a fixed size
     transforms.RandomHorizontalFlip(),  # Randomly flip images horizontally
@@ -133,3 +129,10 @@ def train_model(G_XtoY, G_YtoX, D_X, D_Y, wood_carving_loader, futhark_letter_lo
 # Then calculate loss
 num_epochs = 50
 train_model(G_XtoY, G_YtoX, D_X, D_Y, wood_carving_loader, futhark_letter_loader, optimizer_G, optimizer_D_X, optimizer_D_Y, criterion_GAN, criterion_cycle, criterion_identity, num_epochs)
+
+# Then, use the profiler when you call train_model:
+with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA], record_shapes=True) as prof:
+    train_model(G_XtoY, G_YtoX, D_X, D_Y, wood_carving_loader, futhark_letter_loader, optimizer_G, optimizer_D_X, optimizer_D_Y, criterion_GAN, criterion_cycle, criterion_identity, num_epochs)
+
+# After the training is complete, print the profiling results:
+print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
