@@ -7,3 +7,4 @@ use dataset of 64 different images of carvings:
 
 Train that style to translate to letter from futhark:
 ![algiz-z](https://github.com/user-attachments/assets/a119db41-d3ff-4c0e-906f-fbb3fb56cd81)
+Ahh maybe the image size is flushing it
